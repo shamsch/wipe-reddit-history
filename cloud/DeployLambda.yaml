@@ -25,7 +25,7 @@ Resources:
     LambdaFunction:
         Type: AWS::Lambda::Function
         Properties:
-            Handler: index.handler
+            Handler: function/index.handler
             Runtime: python3.8
             Role: !GetAtt LambdaExecutionRole.Arn
             Code:
