@@ -52,7 +52,6 @@ jobs:
             --template-file cloud/DeployLambda.yaml \
             --stack-name wipe-reddit-history-lambda \
             --no-fail-on-empty-changeset \
-            
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
             RedditUsername=${{ secrets.REDDIT_USERNAME }} \
