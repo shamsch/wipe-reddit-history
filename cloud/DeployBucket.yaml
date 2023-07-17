@@ -8,4 +8,10 @@ Resources:
         Type: AWS::S3::Bucket
         Properties:
             BucketName: !Ref BucketName
-    
+
+Outputs:
+    BucketName:
+        Value: !Ref LambdaBucket
+        Description: Name of the S3 bucket created
+        Export:
+            Name: !Sub "RedditWipeBucket"
