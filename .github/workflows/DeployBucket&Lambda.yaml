@@ -46,6 +46,10 @@ jobs:
         run: |
           aws s3 cp package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
       
+      - name: Delete old Lambda stack 
+        run: |
+          aws cloudformation delete-stack --stack-name wipe-reddit-history-lambda || true
+          
       - name: Deploy the Lambda Function
         run: |
           aws cloudformation deploy \
