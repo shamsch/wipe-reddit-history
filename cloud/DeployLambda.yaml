@@ -37,12 +37,11 @@ Resources:
                     REDDIT_PASSWORD: !Ref RedditPassword
                     REDDIT_APP_ID: !Ref RedditAppId
                     REDDIT_APP_SECRET: !Ref RedditAppSecret
-                    DUMMY: "changeme"
 
     LambdaSchedule:
         Type: AWS::Events::Rule
         Properties:
-            ScheduleExpression: "cron(0 */12 * * ? *)" # Run every 12 hours
+            ScheduleExpression: cron(20 4 * * ? *) # Run every day at 4:20 UTC
             Targets:
                 - Id: LambdaFunction
                   Arn: !GetAtt LambdaFunction.Arn
