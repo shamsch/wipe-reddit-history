@@ -46,9 +46,13 @@ jobs:
               run: |
                   aws s3 cp package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
 
-            - name: Deploy or Update the Lambda Function
+            - name: Delete old Lambda stack
               run: |
-                  aws cloudformation update-stack \
+                  aws cloudformation delete-stack --stack-name wipe-reddit-history-lambda && aws cloudformation wait stack-delete-complete --stack-name wipe-reddit-history-lambda || echo "No old Lambda stack found"
+            
+            - name: Deploy the Lambda Function
+              run: |
+                  aws cloudformation deploy \
                     --template-file cloud/DeployLambda.yaml \
                     --stack-name wipe-reddit-history-lambda \
                     --no-fail-on-empty-changeset \
