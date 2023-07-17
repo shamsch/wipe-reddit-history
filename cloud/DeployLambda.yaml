@@ -15,7 +15,7 @@ Resources:
             Handler: index.handler
             Runtime: python3.8
             Code:
-                S3Bucket: !Ref LambdaBucket
+                S3Bucket: ${{ secrets.BUCKET_NAME }}}
                 S3Key: package.zip
             Environment:
                 Variables:
