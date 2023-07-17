@@ -30,6 +30,9 @@ def handler(event, context):
     # return log of deleted comments
     return {
         'statusCode': 200,
-        'body': deleted_comments_log
+        'body': deleted_comments_log,
+        'execution_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'event': event,
+        'context': context
     }
            

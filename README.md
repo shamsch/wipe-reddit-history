@@ -9,3 +9,11 @@ REDDIT_APP_ID
 REDDIT_APP_SECRET
 BUCKET_NAME
 ```
+## IAM POLICY NEEDED
+```bash
+AmazonEventBridgeFullAccess	
+AmazonS3FullAccess	
+AWSCloudFormationFullAccess	
+AWSLambda_FullAccess	
+IAMFullAccess
+```
