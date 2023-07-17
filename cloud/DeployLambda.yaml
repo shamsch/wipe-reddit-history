@@ -37,6 +37,7 @@ Resources:
                     REDDIT_PASSWORD: !Ref RedditPassword
                     REDDIT_APP_ID: !Ref RedditAppId
                     REDDIT_APP_SECRET: !Ref RedditAppSecret
+                    DUMMY: "dummy"
 
     LambdaSchedule:
         Type: AWS::Events::Rule

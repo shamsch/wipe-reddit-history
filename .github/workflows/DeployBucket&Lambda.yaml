@@ -46,12 +46,13 @@ jobs:
         run: |
           aws s3 cp package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
       
-      - name: Deploy CloudFormation Stack
+      - name: Deploy the Lambda Function
         run: |
           aws cloudformation deploy \
             --template-file cloud/DeployLambda.yaml \
             --stack-name wipe-reddit-history-lambda \
             --no-fail-on-empty-changeset \
+            
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
             RedditUsername=${{ secrets.REDDIT_USERNAME }} \
