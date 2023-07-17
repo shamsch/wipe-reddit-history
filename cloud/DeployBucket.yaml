@@ -1,9 +1,9 @@
-Parameter: 
+Parameters: 
     BucketName:
         Type: String
         Description: Name of the S3 bucket to create
 
-Resource: 
+Resources: 
   LambdaBucket:
         Type: AWS::S3::Bucket
         Properties:
