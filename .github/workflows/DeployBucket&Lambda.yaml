@@ -1,77 +1,73 @@
 name: Deploy Bucket and Lambda
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-      
-      - name: Install Dependencies and Package Lambda Function
-        run: |
-          pip install -r requirements.txt -t .
-          zip -r package.zip . -x "./cloud/*" -x "./.github/*" -x "./.git/*"
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
 
-      - name: Log in to AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-      
-      - name: AWS CLI Install
-        run: |
-          pip install awscli
-      
-      - name: Deploy the Bucket
-        run: |
-          aws cloudformation deploy \
-            --template-file cloud/DeployBucket.yaml \
-            --stack-name wipe-reddit-history-bucket \
-            --no-fail-on-empty-changeset \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-            --parameter-overrides \
-            BucketName=${{ secrets.BUCKET_NAME }}
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.8"
 
-      - name: Upload Function to S3
-        run: |
-          aws s3 cp package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
-      
-      - name: Delete old Lambda stack 
-        run: |
-          aws cloudformation delete-stack --stack-name wipe-reddit-history-lambda || true
-          
-      - name: Deploy the Lambda Function
-        run: |
-          aws cloudformation deploy \
-            --template-file cloud/DeployLambda.yaml \
-            --stack-name wipe-reddit-history-lambda \
-            --no-fail-on-empty-changeset \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-            --parameter-overrides \
-            RedditUsername=${{ secrets.REDDIT_USERNAME }} \
-            RedditPassword=${{ secrets.REDDIT_PASSWORD }} \
-            RedditAppId=${{ secrets.REDDIT_APP_ID }} \
-            RedditAppSecret=${{ secrets.REDDIT_APP_SECRET }}
+            - name: Install Dependencies and Package Lambda Function
+              run: |
+                  pip install -r requirements.txt -t .
+                  zip -r package.zip . -x "./cloud/*" -x "./.github/*" -x "./.git/*"
 
-      - name: Log out of AWS
-        run: |
-          aws configure set aws_access_key_id ""
-          aws configure set aws_secret_access_key ""
-          aws configure set region ""
-        
-      - name: Clean up
-        run: |
-          rm package.zip
-        
-      
-      
+            - name: Log in to AWS
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: eu-north-1
+
+            - name: AWS CLI Install
+              run: |
+                  pip install awscli
+
+            - name: Deploy the Bucket
+              run: |
+                  aws cloudformation deploy \
+                    --template-file cloud/DeployBucket.yaml \
+                    --stack-name wipe-reddit-history-bucket \
+                    --no-fail-on-empty-changeset \
+                    --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+                    --parameter-overrides \
+                    BucketName=${{ secrets.BUCKET_NAME }}
+
+            - name: Upload Function to S3
+              run: |
+                  aws s3 cp package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
+
+            - name: Delete old Lambda stack
+              run: |
+                  aws cloudformation delete-stack --stack-name wipe-reddit-history-lambda && aws cloudformation wait stack-delete-complete --stack-name wipe-reddit-history-lambda || echo "No old Lambda stack found"
+            - name: Deploy the Lambda Function
+              run: |
+                  aws cloudformation deploy \
+                    --template-file cloud/DeployLambda.yaml \
+                    --stack-name wipe-reddit-history-lambda \
+                    --no-fail-on-empty-changeset \
+                    --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+                    --parameter-overrides \
+                    RedditUsername=${{ secrets.REDDIT_USERNAME }} \
+                    RedditPassword=${{ secrets.REDDIT_PASSWORD }} \
+                    RedditAppId=${{ secrets.REDDIT_APP_ID }} \
+                    RedditAppSecret=${{ secrets.REDDIT_APP_SECRET }}
+
+            - name: Log out of AWS
+              run: |
+                  aws configure set aws_access_key_id ""
+                  aws configure set aws_secret_access_key ""
+                  aws configure set region ""
+
+            - name: Clean up
+              run: |
+                  rm package.zip
