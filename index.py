@@ -3,6 +3,7 @@ import praw
 from datetime import datetime, timedelta
 import random
 
+
 def handler(event, context):
     reddit = praw.Reddit(
         client_id=os.environ['REDDIT_APP_ID'],
@@ -11,26 +12,30 @@ def handler(event, context):
         password=os.environ['REDDIT_PASSWORD'],
         user_agent="delete_comments"
     )
-    
+
     cutoff_time = datetime.now() - timedelta(hours=72)
 
     deleted_comments_log = {}
-    
+
     for comment in reddit.redditor(os.environ['REDDIT_USERNAME']).comments.new(limit=None):
-        if datetime.fromtimestamp(comment.created_utc) < cutoff_time and comment.score < 1:
-            if random.random() < 0.95:
+        if datetime.fromtimestamp(comment.created_utc) < cutoff_time:
+            if comment.score < 1:
                 comment.delete()
-                # add comment to log with timestamp, score, and body
                 deleted_comments_log[comment.id] = {
                     'timestamp': comment.created_utc,
                     'score': comment.score,
                     'body': comment.body
                 }
-    
-    # return log of deleted comments
+            elif comment.score < 10 and random.random() < 0.50:
+                comment.delete()
+                deleted_comments_log[comment.id] = {
+                    'timestamp': comment.created_utc,
+                    'score': comment.score,
+                    'body': comment.body
+                }
     return {
         'statusCode': 200,
+        'username': os.environ['REDDIT_USERNAME'],
         'body': deleted_comments_log,
-        'execution_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        'execution_time': f'UTC time: {datetime.now()}'
     }
-           
