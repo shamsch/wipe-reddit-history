@@ -1,0 +1,34 @@
+Parameters:
+    RedditUsername:
+        Type: String
+    RedditPassword:
+        Type: String
+    RedditAppId:
+        Type: String
+    RedditAppSecret:
+        Type: String
+
+Resources:
+    LambdaFunction:
+        Type: AWS::Lambda::Function
+        Properties:
+            Handler: index.handler
+            Runtime: python3.8
+            Code:
+                S3Bucket: !Ref LambdaBucket
+                S3Key: package.zip
+            Environment:
+                Variables:
+                    REDDIT_USERNAME: !Ref RedditUsername
+                    REDDIT_PASSWORD: !Ref RedditPassword
+                    REDDIT_APP_ID: !Ref RedditAppId
+                    REDDIT_APP_SECRET: !Ref RedditAppSecret
+
+    LambdaSchedule:
+        Type: AWS::Events::Rule
+        Properties:
+            ScheduleExpression: "cron(0 */12 * * ? *)" # Run every 12 hours
+            Targets:
+                - Id: LambdaFunction
+                  Arn: !GetAtt LambdaFunction.Arn
+
