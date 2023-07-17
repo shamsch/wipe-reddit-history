@@ -43,7 +43,7 @@ jobs:
 
       - name: Upload Function to S3
         run: |
-          aws s3 cp function/package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
+          aws s3 cp package.zip s3://${{ secrets.BUCKET_NAME }}/package.zip
       
       - name: Deploy CloudFormation Stack
         run: |
