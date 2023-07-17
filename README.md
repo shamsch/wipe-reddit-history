@@ -1,5 +1,5 @@
 # Wipe Reddit History
-A simple AWS Lambda function to wipe Reddit history. Currently, it only delete 95% of the comments that are older than 72 hours have less 1 karma. This is a very specific use case for my personal preference which you should modify to your liking. The function is triggered by every 12 hours by AWS EventBridge. Deployed by AWS CloudFormation through GitHub Actions by dispatching manually. 
+A simple AWS Lambda function to wipe Reddit history. Currently, it only delete 95% of the comments that are older than 72 hours have less 1 karma. This is a very specific use case for my personal preference which you should modify to your liking. The function is triggered every 12 hours by AWS EventBridge. Deployed by AWS CloudFormation through GitHub Actions by dispatching manually. 
 
 ### ENVIRONMENT VARIABLE TO RUN GITHUB ACTIONS
 Set up the following variable in GitHub repository secrets to run the GitHub Actions.
