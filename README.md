@@ -1,33 +1,44 @@
-# Wipe Reddit History
-A simple AWS Lambda function to wipe Reddit history. Currently, it deletes all comments older than 72 hour with less than 1 karma and 50% with less than 10 karmas randomly. This is a very specific use case for my personal preference which you should modify to your liking. The function is triggered every day at 4:20 UTC by AWS EventBridge. Deployed by AWS CloudFormation through GitHub Actions by dispatching manually. 
+# 🚀 Wipe Reddit History 🗑️
 
-### ENVIRONMENT VARIABLE TO RUN GITHUB ACTIONS
-Set up the following variable in GitHub repository secrets to run the GitHub Actions.
+A simple AWS Lambda function to help minimize your footprint on Reddit. Currently, it deletes all comments older than 72 hours with less than 1 karma and deletes comments aged between 3 and 5 days with a score less than 10 karma with 50% probability. 
+
+### 💻 Environment Variables for Github Actions 📝
+
+Set up the following variable in Github repository secrets to run the Github Actions. Make sure to replace 'value' with your actual details.
+
 ```bash
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
-REDDIT_USERNAME
-REDDIT_PASSWORD
-REDDIT_APP_ID
-REDDIT_APP_SECRET
-BUCKET_NAME
+AWS_ACCESS_KEY_ID=value 
+AWS_SECRET_ACCESS_KEY=value 
+REDDIT_USERNAME=value 
+REDDIT_PASSWORD=value 
+REDDIT_APP_ID=value 
+REDDIT_APP_SECRET=value 
+BUCKET_NAME=value 
 ```
 Get the Reddit app ID and secret from [here](https://www.reddit.com/prefs/apps). Create a new app if you don't have one. Add your username as the developer. The app type is script. The redirect URL can be anything.
 
-### IAM POLICY NEEDED
-Add the following IAM policy to the IAM user or role that will be used to run the GitHub Actions.
-```bash
-AmazonEventBridgeFullAccess	
-AmazonS3FullAccess	
-AWSCloudFormationFullAccess	
-AWSLambda_FullAccess	
-IAMFullAccess
-```
+### 🔐 GitHub Action Permissions 🛡️
 
-## TODO
-- [ ] Allow passing username and password as parameter to the Lambda function.
-- [ ] More granular control over the deletion process.
-- [ ] Delete posts.
-- [ ] Create a simple web frontend to trigger the Lambda function.
-- [ ] Add tests
-- [ ] Update the dependencies in `requirements.txt`
+The following permissions are necessary for the Github Actions to run correctly. Make sure the IAM user or role has these permissions:
+
+
+> AmazonEventBridgeFullAccess
+> 	
+> AmazonS3FullAccess
+> 
+> AWSCloudFormationFullAccess
+> 
+> AWSLambda_FullAccess
+> 
+> IAMFullAccess
+
+## 📋 TODO ✔️
+
+- [ ] Allow passing username and password as parameters to the Lambda function. 🔐
+- [ ] More granular control over the deletion process. 🎛️
+- [ ] Delete posts. 📝
+- [ ] Create a simple web frontend to trigger the Lambda function. 🖥️
+- [ ] Add tests. 🧪
+- [ ] Update the dependencies in requirements.txt 📦
+
+This project is under active development. Contributions are welcome! 🤝
