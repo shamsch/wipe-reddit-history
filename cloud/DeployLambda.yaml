@@ -21,6 +21,26 @@ Resources:
                       Action: sts:AssumeRole
             ManagedPolicyArns:
                 - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    
+    EventBridgeExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service:
+                            - events.amazonaws.com
+                      Action: sts:AssumeRole
+            Policies:
+                - PolicyName: target-lambda
+                  PolicyDocument:
+                      Version: "2012-10-17"
+                      Statement:
+                          - Effect: Allow
+                            Action: lambda:InvokeFunction
+                            Resource: !GetAtt LambdaFunction.Arn
 
     LambdaFunction:
         Type: AWS::Lambda::Function
@@ -41,7 +61,9 @@ Resources:
     LambdaSchedule:
         Type: AWS::Events::Rule
         Properties:
-            ScheduleExpression: cron(20 4 * * ? *) # Run every day at 4:20 UTC
+            ScheduleExpression: cron(21 4 * * ? *) # Run every day at 4:21 UTC
             Targets:
                 - Id: LambdaFunction
                   Arn: !GetAtt LambdaFunction.Arn
+                  RoleArn: !GetAtt EventBridgeExecutionRole.Arn
+    
