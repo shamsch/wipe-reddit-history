@@ -34,10 +34,9 @@ The following permissions are necessary for the Github Actions to run correctly.
 
 ## 📋 TODO ✔️
 
-- [ ] Allow passing username and password as parameters to the Lambda function. 🔐
-- [ ] More granular control over the deletion process. 🎛️
+- [ ] Allow multi-account 🔐
 - [ ] Delete posts. 📝
-- [ ] Create a simple web frontend to trigger the Lambda function. 🖥️
+- [ ] Possibly a front-end of sort. 🖥️
 - [ ] Add tests. 🧪
 - [ ] Update the dependencies in requirements.txt 📦
 
