@@ -21,26 +21,6 @@ Resources:
                       Action: sts:AssumeRole
             ManagedPolicyArns:
                 - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-    
-    EventBridgeExecutionRole:
-        Type: AWS::IAM::Role
-        Properties:
-            AssumeRolePolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                    - Effect: Allow
-                      Principal:
-                          Service:
-                            - events.amazonaws.com
-                      Action: sts:AssumeRole
-            Policies:
-                - PolicyName: target-lambda
-                  PolicyDocument:
-                      Version: "2012-10-17"
-                      Statement:
-                          - Effect: Allow
-                            Action: lambda:InvokeFunction
-                            Resource: !GetAtt LambdaFunction.Arn
 
     LambdaFunction:
         Type: AWS::Lambda::Function
@@ -65,5 +45,12 @@ Resources:
             Targets:
                 - Id: LambdaFunction
                   Arn: !GetAtt LambdaFunction.Arn
-                  RoleArn: !GetAtt EventBridgeExecutionRole.Arn
+
+    PermissionForEventsToInvokeLambda:
+        Type: AWS::Lambda::Permission
+        Properties:
+          FunctionName: !Ref LambdaFunction
+          Action: lambda:InvokeFunction
+          Principal: events.amazonaws.com
+          SourceArn: !GetAtt LambdaSchedule.Arn
     
