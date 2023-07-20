@@ -37,4 +37,6 @@ def delete_comments(reddit):
 
 def handler(event, context):
     reddit = setup_reddit()
-    return delete_comments(reddit)
+    deleted_comments = delete_comments(reddit) 
+    print(deleted_comments)
+    return deleted_comments 
