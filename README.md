@@ -34,6 +34,7 @@ The following permissions are necessary for the Github Actions to run correctly.
 
 ## 📋 TODO ✔️
 
+- [ ] Send monthly log by email using SNS 📝
 - [ ] Allow multi-account 🔐
 - [ ] Delete posts. 📝
 - [ ] Possibly a front-end of sort. 🖥️
